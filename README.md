@@ -11,7 +11,8 @@ How it shows:
 
 The first screen is a list of repositories. 
 In each cell of the list - the name of the repository, the number of stars and forks. 
-By clicking on the repository, goes to the second screen - repository details, wich contains: * full name, description, url, the number of stars, forks, watches, issues.
+By clicking on the repository, goes to the second screen - repository details, wich contains:
+full name, description, url, the number of stars, forks, watches, issues.
 
 Technologies:
 
