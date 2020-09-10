@@ -1,0 +1,25 @@
+<?xml version="1.0" encoding="utf-8"?>
+<navigation xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:id="@+id/nav_graph"
+    app:startDestination="@id/squareReposListFragment">
+
+    <fragment
+        android:id="@+id/squareReposListFragment"
+        android:name="com.example.squarerepos.ui.squarelist.SquareReposListFragment">
+        <action
+            android:id="@+id/action_squareReposListFragment_to_detailSquareReposFragment"
+            app:destination="@id/detailSquareReposFragment" />
+    </fragment>
+
+    <fragment
+        android:id="@+id/detailSquareReposFragment"
+        android:name="com.example.squarerepos.ui.squaredetail.DetailSquareReposFragment">
+
+        <argument
+            android:name="repoName"
+            app:argType="string"
+            app:nullable="false" />
+    </fragment>
+
+</navigation>

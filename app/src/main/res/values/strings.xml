@@ -1,0 +1,4 @@
+<resources>
+    <string name="app_name">Square Repositories</string>
+    <string name="detail_repos_title">Detail %1$s</string>
+</resources>

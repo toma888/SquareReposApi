@@ -1,0 +1,43 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    style="@style/Match.LinearLayout.Padding">
+
+    <TextView
+        android:id="@+id/tv_url"
+        style="@style/Wide.Text" />
+
+    <TextView
+        android:id="@+id/tv_full_name"
+        style="@style/Wide.Text.PaddingTop" />
+
+    <LinearLayout style="@style/Wide.Horizontal">
+
+        <TextView
+            android:id="@+id/tv_star"
+            style="@style/Wrap"
+            android:drawableStart="@drawable/ic_star" />
+
+        <TextView
+            android:id="@+id/tv_fork"
+            style="@style/Wrap.Text"
+            android:drawableStart="@drawable/ic_fork" />
+
+        <TextView
+            android:id="@+id/tv_watcher"
+            style="@style/Wrap.Text"
+            android:drawableStart="@drawable/ic_watcher" />
+
+        <TextView
+            android:id="@+id/tv_contributor"
+            style="@style/Wrap.Text"
+            android:drawableStart="@drawable/ic_issues" />
+    </LinearLayout>
+
+    <TextView
+        android:id="@+id/tv_language"
+        style="@style/Wide.Text.PaddingTop" />
+
+    <TextView
+        android:id="@+id/tv_description"
+        style="@style/Wide.Text.PaddingTop" />
+</LinearLayout>

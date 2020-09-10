@@ -1,0 +1,25 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    style="@style/Wide.LinearLayout"
+    android:id="@+id/layout">
+
+    <TextView
+        android:id="@+id/tv_name"
+        style="@style/Wide.Text" />
+
+    <LinearLayout style="@style/Wide.Horizontal">
+
+        <TextView
+            android:id="@+id/tv_star"
+            style="@style/Wrap.Text"
+            android:drawableStart="@drawable/ic_star" />
+
+        <TextView
+            android:id="@+id/tv_fork"
+            style="@style/Wrap.Text"
+            android:drawableStart="@drawable/ic_fork" />
+
+    </LinearLayout>
+
+
+</LinearLayout>
