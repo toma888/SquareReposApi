@@ -9,10 +9,10 @@ What downloads - list of repositories https://github.com/square
 
 How it shows:
 
-The first screen is a list of repositories. 
-In each cell of the list - the name of the repository, the number of stars and forks. 
-By clicking on the repository, goes to the second screen - repository details, wich contains:
-full name, description, url, language, the number of stars, forks, watches, issues.
+The first screen is a list of repositories.  
+In each cell of the list - the name of the repository, number of stars and forks. 
+By clicking any repository from the list the app redirects to the second screen - repository details, which contains:
+full name, description, url, language, number of stars, forks, watches, issues.
 
 Technologies:
 
