@@ -74,11 +74,9 @@ dependencies {
     // Picasso
     implementation "com.squareup.picasso:picasso:$picasso_version"
 
-    // RxJava 2
-    implementation "io.reactivex.rxjava2:rxjava:$rxjava_version"
-
-    // RxAndroid 2
-    implementation "io.reactivex.rxjava2:rxandroid:$rxandroid_version"
+    //Coroutines
+    implementation "org.jetbrains.kotlinx:kotlinx-coroutines-core:$kotlin_coroutines_version"
+    implementation "org.jetbrains.kotlinx:kotlinx-coroutines-android:$kotlin_coroutines_version"
 
     // ConstraintLayout
     implementation "androidx.constraintlayout:constraintlayout:$constraint_layout_version"

@@ -2,12 +2,13 @@ package com.example.squarerepos.ui.squarelist
 
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
+import androidx.lifecycle.viewModelScope
 import com.example.squarerepos.core.base.BaseViewModel
 import com.example.squarerepos.core.base.SingleEventLiveData
 import com.example.squarerepos.data.mapper.toDisplayListSquareRepos
 import com.example.squarerepos.domain.interactor.SquareReposInteractor
 import com.example.squarerepos.ui.recyclerview.model.SquareReposListDisplayItem
-import io.reactivex.schedulers.Schedulers
+import kotlinx.coroutines.launch
 import javax.inject.Inject
 
 class SquareReposListViewModel @Inject constructor(
@@ -23,12 +24,13 @@ class SquareReposListViewModel @Inject constructor(
         get() = _message
 
     fun loadReposList() {
-        compositeDisposable.add(
-            interactor.getSquareReposList()
-                .subscribeOn(Schedulers.newThread())
-                .subscribe(
-                    { list -> _listOfRepos.postValue(list.toDisplayListSquareRepos().toMutableList()) },
-                    { e -> _message.postValue("An error occurred: ${e.message}") })
-        )
+        viewModelScope.launch {
+            try {
+                val list = interactor.getSquareReposList()
+                _listOfRepos.setValue(list.toDisplayListSquareRepos().toMutableList())
+            } catch (e: Exception) {
+                _message.setValue("An error occurred: ${e.message}")
+            }
+        }
     }
 }
