@@ -2,11 +2,12 @@ package com.example.squarerepos.ui.squaredetail
 
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
+import androidx.lifecycle.viewModelScope
 import com.example.squarerepos.core.base.BaseViewModel
 import com.example.squarerepos.core.base.SingleEventLiveData
 import com.example.squarerepos.data.mapper.toDisplaySquareRepos
 import com.example.squarerepos.domain.interactor.SquareReposInteractor
-import io.reactivex.schedulers.Schedulers
+import kotlinx.coroutines.launch
 import javax.inject.Inject
 
 class DetailReposViewModel @Inject constructor(
@@ -22,12 +23,13 @@ class DetailReposViewModel @Inject constructor(
         get() = _message
 
     fun loadDetailRepos(repoName: String) {
-        compositeDisposable.add(
-            interactor.getDetailSquareRepos(repoName)
-                .subscribeOn(Schedulers.newThread())
-                .subscribe(
-                    { detailRepos -> _detailRepos.postValue(detailRepos.toDisplaySquareRepos()) },
-                    { e -> _message.postValue("An error occurred: ${e.message}") })
-        )
+        viewModelScope.launch() {
+            try {
+                val detailRepos = interactor.getDetailSquareRepos(repoName)
+                _detailRepos.setValue(detailRepos.toDisplaySquareRepos())
+            } catch (e: Exception) {
+                _message.setValue("An error occurred: ${e.message}")
+            }
+        }
     }
 }
