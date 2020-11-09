@@ -7,6 +7,7 @@ import com.example.squarerepos.core.base.BaseViewModel
 import com.example.squarerepos.core.base.SingleEventLiveData
 import com.example.squarerepos.data.mapper.toDisplayListSquareRepos
 import com.example.squarerepos.domain.interactor.SquareReposInteractor
+import com.example.squarerepos.network.ResultWrapper
 import com.example.squarerepos.ui.recyclerview.model.SquareReposListDisplayItem
 import kotlinx.coroutines.launch
 import javax.inject.Inject
@@ -25,11 +26,11 @@ class SquareReposListViewModel @Inject constructor(
 
     fun loadReposList() {
         viewModelScope.launch {
-            try {
-                val list = interactor.getSquareReposList()
-                _listOfRepos.setValue(list.toDisplayListSquareRepos().toMutableList())
-            } catch (e: Exception) {
-                _message.setValue("An error occurred: ${e.message}")
+            when (val listResponse = interactor.getSquareReposList()) {
+                is ResultWrapper.Success -> _listOfRepos.setValue(
+                    listResponse.data.toDisplayListSquareRepos().toMutableList()
+                )
+                is ResultWrapper.Failure -> _message.setValue("An error occurred: ${listResponse.throwable.message}")
             }
         }
     }
