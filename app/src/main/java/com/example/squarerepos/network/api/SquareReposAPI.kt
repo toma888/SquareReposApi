@@ -6,7 +6,7 @@ import retrofit2.http.GET
 import retrofit2.http.Path
 
 interface SquareReposAPI {
-    @GET("users/square/reposs")
+    @GET("users/square/repos")
     suspend fun getRepoList(): List<SquareReposResponse>
 
     @GET("repos/square/{repo}")

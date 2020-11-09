@@ -10,9 +10,8 @@ import com.example.squarerepos.domain.interactor.SquareReposInteractor
 import com.example.squarerepos.network.ResultWrapper
 import com.example.squarerepos.ui.recyclerview.model.SquareReposListDisplayItem
 import kotlinx.coroutines.launch
-import javax.inject.Inject
 
-class SquareReposListViewModel @Inject constructor(
+class SquareReposListViewModel(
     private val interactor: SquareReposInteractor
 ) : BaseViewModel() {
 

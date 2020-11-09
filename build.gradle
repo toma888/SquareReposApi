@@ -34,6 +34,7 @@ ext {
     retrofit_rxjava_adapter_version = "1.0.0"
     adapter_delegates_version = "4.2.0"
     kotlin_coroutines_version = "1.4.0"
+    koin_version = "2.2.0-rc-4"
 }
 
 allprojects {

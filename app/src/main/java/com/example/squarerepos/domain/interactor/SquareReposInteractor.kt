@@ -5,9 +5,8 @@ import com.example.squarerepos.domain.usecase.GetSquareReposListUseCase
 import com.example.squarerepos.network.ResultWrapper
 import com.example.squarerepos.network.model.DetailSquareReposResponse
 import com.example.squarerepos.network.model.SquareReposResponse
-import javax.inject.Inject
 
-class SquareReposInteractor @Inject constructor(
+class SquareReposInteractor(
     private val getSquareReposList: GetSquareReposListUseCase,
     private val getDetailSquareRepos: GetDetailSquareReposUseCase
 ) {

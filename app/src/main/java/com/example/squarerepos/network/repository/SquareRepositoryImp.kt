@@ -6,9 +6,8 @@ import com.example.squarerepos.network.api.SquareReposAPI
 import com.example.squarerepos.network.model.DetailSquareReposResponse
 import com.example.squarerepos.network.model.SquareReposResponse
 import com.example.squarerepos.network.safeApiCall
-import javax.inject.Inject
 
-class SquareRepositoryImp @Inject constructor(private val api: SquareReposAPI) : SquareRepository {
+class SquareRepositoryImp(private val api: SquareReposAPI) : SquareRepository {
 
     override suspend fun getRepoList(): ResultWrapper<List<SquareReposResponse>> {
         return safeApiCall { api.getRepoList() }

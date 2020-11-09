@@ -8,9 +8,8 @@ import com.example.squarerepos.core.base.SingleEventLiveData
 import com.example.squarerepos.data.mapper.toDisplaySquareRepos
 import com.example.squarerepos.domain.interactor.SquareReposInteractor
 import kotlinx.coroutines.launch
-import javax.inject.Inject
 
-class DetailReposViewModel @Inject constructor(
+class DetailReposViewModel(
     private val interactor: SquareReposInteractor
 ) : BaseViewModel() {
 
