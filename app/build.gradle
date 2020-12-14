@@ -95,4 +95,9 @@ dependencies {
     // AdapterDelegates
     implementation "com.hannesdorfmann:adapterdelegates4-kotlin-dsl:$adapter_delegates_version"
     implementation "com.hannesdorfmann:adapterdelegates4-kotlin-dsl-layoutcontainer:$adapter_delegates_version"
+
+    //https://github.com/googlecodelabs/android-paging/issues/118
+    api ("androidx.paging:paging-runtime-ktx:$paging_version"){
+        exclude group: 'org.jetbrains.kotlinx', module: 'kotlinx-coroutines-core-jvm'
+    }
 }

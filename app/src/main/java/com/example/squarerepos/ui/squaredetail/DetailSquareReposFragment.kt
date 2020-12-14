@@ -27,11 +27,11 @@ class DetailSquareReposFragment : BaseFragment(R.layout.fragment_detail_repos) {
 
     private fun addObservers() {
         viewModel.detailRepos
-            .observe(viewLifecycleOwner, Observer { detailRepos ->
+            .observe(viewLifecycleOwner, { detailRepos ->
                 renderDetailRepos(detailRepos)
             })
 
-        viewModel.message.observe(this, Observer { message ->
+        viewModel.message.observe(viewLifecycleOwner, { message ->
             if (!message.isNullOrEmpty()) {
                 Toast.makeText(requireActivity(), message, Toast.LENGTH_SHORT).show()
             }
