@@ -7,21 +7,18 @@ import org.koin.android.viewmodel.dsl.viewModel
 import org.koin.core.context.loadKoinModules
 import org.koin.dsl.module
 
-internal object SquareReposListModule {
-
-    fun get() = module(override = true) {
-        viewModel {
-            SquareReposListViewModel(get())
-        }
-        single {
-            SquareReposInteractor(
-                GetSquareReposListUseCase(get()),
-                GetDetailSquareReposUseCase(get())
-            )
-        }
+internal val squareReposListModule = module {
+    viewModel {
+        SquareReposListViewModel(get())
+    }
+    single {
+        SquareReposInteractor(
+            GetSquareReposListUseCase(get()),
+            GetDetailSquareReposUseCase(get())
+        )
     }
 }
 
 internal fun loadModule() {
-    loadKoinModules(SquareReposListModule.get())
+    loadKoinModules(squareReposListModule)
 }
