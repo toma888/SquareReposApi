@@ -3,14 +3,14 @@ package com.example.squarerepos.ui.squaredetail
 import android.os.Bundle
 import android.view.View
 import android.widget.Toast
+import androidx.fragment.app.Fragment
 import androidx.lifecycle.Observer
 import androidx.navigation.fragment.navArgs
 import com.example.squarerepos.R
-import com.example.squarerepos.core.base.BaseFragment
 import kotlinx.android.synthetic.main.fragment_detail_repos.*
 import org.koin.android.viewmodel.ext.android.viewModel
 
-class DetailSquareReposFragment : BaseFragment(R.layout.fragment_detail_repos) {
+class DetailSquareReposFragment : Fragment(R.layout.fragment_detail_repos) {
     private val viewModel by viewModel<DetailReposViewModel>()
 
     private val detailReposArgs: DetailSquareReposFragmentArgs by navArgs()
@@ -31,7 +31,7 @@ class DetailSquareReposFragment : BaseFragment(R.layout.fragment_detail_repos) {
                 renderDetailRepos(detailRepos)
             })
 
-        viewModel.message.observe(this, Observer { message ->
+        viewModel.message.observe(viewLifecycleOwner, Observer { message ->
             if (!message.isNullOrEmpty()) {
                 Toast.makeText(requireActivity(), message, Toast.LENGTH_SHORT).show()
             }

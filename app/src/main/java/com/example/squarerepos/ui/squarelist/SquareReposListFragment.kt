@@ -3,7 +3,7 @@ package com.example.squarerepos.ui.squarelist
 import android.os.Bundle
 import android.view.View
 import android.widget.Toast
-import androidx.lifecycle.Observer
+import androidx.core.view.isVisible
 import androidx.navigation.fragment.findNavController
 import androidx.recyclerview.widget.DividerItemDecoration
 import androidx.recyclerview.widget.LinearLayoutManager
@@ -17,8 +17,9 @@ import com.example.squarerepos.ui.recyclerview.model.SquareReposListDisplayItem
 import kotlinx.android.synthetic.main.fragment_repos_list.*
 import org.koin.android.viewmodel.ext.android.viewModel
 
-class SquareReposListFragment : BaseFragment(R.layout.fragment_repos_list) {
-    private val viewModel by viewModel<SquareReposListViewModel>()
+class SquareReposListFragment : BaseFragment<SquareReposListIntent, SquareReposListViewState, SquareReposListViewEvent,
+        SquareReposListViewModel>(R.layout.fragment_repos_list) {
+    override val viewModel by viewModel<SquareReposListViewModel>()
 
     private lateinit var squareReposListAdapter: SquareReposListAdapterDiffUtils
 
@@ -30,38 +31,17 @@ class SquareReposListFragment : BaseFragment(R.layout.fragment_repos_list) {
         setViews()
         addObservers()
 
-        viewModel.loadReposList()
+        viewModel.intentChannel.offer(SquareReposListIntent.OnStart)
     }
 
     private fun setListAdapters() {
         squareReposListAdapter = SquareReposListAdapterDiffUtils(
             AdapterDelegatesManager<SquareReposListDisplayItem>().apply {
                 val itemOnClickListener: (SquareReposListDisplayItem.SquareReposListItem) -> Unit =
-                    { item ->
-                        findNavController().navigate(
-                            SquareReposListFragmentDirections.actionSquareReposListFragmentToDetailSquareReposFragment(
-                                item.name
-                            )
-                        )
-                    }
-                addDelegate(
-                    SquareReposListAdapterDelegate(itemOnClickListener)
-                )
+                    { item -> viewModel.intentChannel.offer(SquareReposListIntent.OnDetailClicked(item.name)) }
+                addDelegate(SquareReposListAdapterDelegate(itemOnClickListener))
             }
         )
-    }
-
-    private fun addObservers() {
-        viewModel.listOfRepos
-            .observe(viewLifecycleOwner, Observer<MutableList<SquareReposListDisplayItem>> { list ->
-                squareReposListAdapter.setItems(list)
-            })
-
-        viewModel.message.observe(this, Observer { message ->
-            if (!message.isNullOrEmpty()) {
-                Toast.makeText(requireActivity(), message, Toast.LENGTH_SHORT).show()
-            }
-        })
     }
 
     private fun setViews() {
@@ -74,5 +54,25 @@ class SquareReposListFragment : BaseFragment(R.layout.fragment_repos_list) {
         }
 
         squareReposListAdapter.setItems(ArrayList())
+    }
+
+    override fun renderState(state: SquareReposListViewState) {
+        progress_bar.isVisible = state is SquareReposListViewState.Loading
+        when (state) {
+            is SquareReposListViewState.Success -> squareReposListAdapter.setItems(state.data)
+            else -> Unit
+        }
+    }
+
+    override fun renderEvent(event: SquareReposListViewEvent) {
+        when (event) {
+            is SquareReposListViewEvent.ShowToast -> Toast.makeText(
+                requireActivity(), event.message, Toast.LENGTH_SHORT
+            ).show()
+            is SquareReposListViewEvent.NavigateToDetail -> findNavController().navigate(
+                SquareReposListFragmentDirections.actionSquareReposListFragmentToDetailSquareReposFragment(event.repoName)
+            )
+        }
+
     }
 }
