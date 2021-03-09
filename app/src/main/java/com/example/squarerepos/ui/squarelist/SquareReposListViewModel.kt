@@ -1,6 +1,7 @@
 package com.example.squarerepos.ui.squarelist
 
 import com.example.squarerepos.core.base.BaseViewModel
+import com.example.squarerepos.core.base.Event
 import com.example.squarerepos.data.mapper.toDisplayListSquareRepos
 import com.example.squarerepos.domain.interactor.SquareReposInteractor
 import com.example.squarerepos.network.ResultWrapper
@@ -13,6 +14,7 @@ class SquareReposListViewModel(
 ) : BaseViewModel<SquareReposListViewState, SquareReposListViewEvent, SquareReposListIntent>() {
 
     override val _state = MutableStateFlow<SquareReposListViewState>(SquareReposListViewState.Loading)
+    override var _viewEvent: MutableStateFlow<Event<SquareReposListViewEvent?>> = MutableStateFlow(Event(null))
 
     override suspend fun handleIntents() {
         intentChannel.consumeAsFlow().collect { intent ->
@@ -23,15 +25,15 @@ class SquareReposListViewModel(
                             listResponse.data.toDisplayListSquareRepos().toMutableList()
                         )
                         is ResultWrapper.Failure -> {
-                            _viewEvent.setValue(SquareReposListViewEvent.ShowToast("An error occurred: ${listResponse.throwable.message}"))
+                            _viewEvent.value = Event(
+                                SquareReposListViewEvent.ShowToast("An error occurred: ${listResponse.throwable.message}")
+                            )
                             _state.value = SquareReposListViewState.Error
                         }
                     }
                 }
-                is SquareReposListIntent.OnDetailClicked -> _viewEvent.setValue(
-                    SquareReposListViewEvent.NavigateToDetail(
-                        intent.repoName
-                    )
+                is SquareReposListIntent.OnDetailClicked -> _viewEvent.value = Event(
+                    SquareReposListViewEvent.NavigateToDetail(intent.repoName)
                 )
             }
         }

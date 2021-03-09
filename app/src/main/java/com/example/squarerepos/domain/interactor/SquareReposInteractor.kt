@@ -12,6 +12,6 @@ class SquareReposInteractor(
 ) {
     suspend fun getSquareReposList(): ResultWrapper<List<SquareReposResponse>> = getSquareReposList.invoke()
 
-    suspend fun getDetailSquareRepos(repo: String): DetailSquareReposResponse =
+    suspend fun getDetailSquareRepos(repo: String): ResultWrapper<DetailSquareReposResponse> =
         getDetailSquareRepos.invoke(GetDetailSquareReposUseCase.Request(repo))
 }

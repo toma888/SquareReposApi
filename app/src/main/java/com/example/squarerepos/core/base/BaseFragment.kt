@@ -3,7 +3,6 @@ package com.example.squarerepos.core.base
 import androidx.annotation.LayoutRes
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.lifecycleScope
-import androidx.lifecycle.observe
 import kotlinx.coroutines.flow.launchIn
 import kotlinx.coroutines.flow.onEach
 
@@ -13,10 +12,12 @@ abstract class BaseFragment<INTENT : Intent, STATE : ViewState, EVENT : ViewEven
 
     open fun addObservers() {
         viewModel.state
-            .onEach { state -> renderState(state) }
+            .onEach { renderState(it) }
             .launchIn(lifecycleScope)
 
-        viewModel.viewEvent.observe(this) { renderEvent(it) }
+        viewModel.viewEvent
+            .onEachEvent { renderEvent(it) }
+            .launchIn(lifecycleScope)
     }
 
     abstract fun renderState(state: STATE)
