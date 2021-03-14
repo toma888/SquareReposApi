@@ -85,14 +85,21 @@ dependencies {
     // Material
     implementation "com.google.android.material:material:$material_version"
 
-    // JUnit
-    testImplementation "junit:junit:$junit_version"
-    testImplementation "org.jetbrains.kotlinx:kotlinx-coroutines-test:$kotlin_coroutines_version"
-
     // RxJava2 AdapterFactory for Retrofit2
     implementation "com.jakewharton.retrofit:retrofit2-rxjava2-adapter:$retrofit_rxjava_adapter_version"
 
     // AdapterDelegates
     implementation "com.hannesdorfmann:adapterdelegates4-kotlin-dsl:$adapter_delegates_version"
     implementation "com.hannesdorfmann:adapterdelegates4-kotlin-dsl-layoutcontainer:$adapter_delegates_version"
+
+    //Test
+    // JUnit
+    testImplementation "junit:junit:$junit_version"
+    testImplementation "org.jetbrains.kotlinx:kotlinx-coroutines-test:1.4.2"
+    testImplementation "org.mockito:mockito-core:3.2.4"
+    testImplementation "org.mockito:mockito-inline:3.2.4"
+    // Test helpers for LiveData
+    testImplementation "android.arch.core:core-testing:1.1.1"
+    //koin
+    testImplementation "org.koin:koin-test:$koin_version"
 }
