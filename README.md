@@ -16,10 +16,12 @@ full name, description, url, language, number of stars, forks, watches, issues.
 
 Technologies:
 
-- RxJava 2
+- RxJava 2 / Kotlin Coroutines, Kotlin Flow 
+- Paging 3
 - Retrofit 2
-- Dagger 2
+- Dagger 2 / Koin
 - OkHttp 3
-- MVVM architecture
+- MVVM architecture / MVI architecture
 - Navigation component
 - Single Activity
+- Mockito, Coroutines Test, Koin Test
