@@ -13,7 +13,7 @@ class SquareRepositoryImp(private val api: SquareReposAPI) : SquareRepository {
         return safeApiCall { api.getRepoList() }
     }
 
-    override suspend fun getDetailRepo(repo: String): DetailSquareReposResponse {
-        return api.getDetailRepo(repo)
+    override suspend fun getDetailRepo(repo: String): ResultWrapper<DetailSquareReposResponse> {
+        return safeApiCall {api.getDetailRepo(repo) }
     }
 }

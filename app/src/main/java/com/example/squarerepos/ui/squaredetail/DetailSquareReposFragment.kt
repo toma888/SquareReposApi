@@ -3,15 +3,15 @@ package com.example.squarerepos.ui.squaredetail
 import android.os.Bundle
 import android.view.View
 import android.widget.Toast
-import androidx.lifecycle.Observer
 import androidx.navigation.fragment.navArgs
 import com.example.squarerepos.R
 import com.example.squarerepos.core.base.BaseFragment
 import kotlinx.android.synthetic.main.fragment_detail_repos.*
 import org.koin.android.viewmodel.ext.android.viewModel
 
-class DetailSquareReposFragment : BaseFragment(R.layout.fragment_detail_repos) {
-    private val viewModel by viewModel<DetailReposViewModel>()
+class DetailSquareReposFragment : BaseFragment<DetailReposIntent, DetailReposViewState, DetailReposViewEvent,
+        DetailReposViewModel>(R.layout.fragment_detail_repos) {
+    override val viewModel by viewModel<DetailReposViewModel>()
 
     private val detailReposArgs: DetailSquareReposFragmentArgs by navArgs()
 
@@ -22,34 +22,36 @@ class DetailSquareReposFragment : BaseFragment(R.layout.fragment_detail_repos) {
         setViews()
         addObservers()
 
-        viewModel.loadDetailRepos(detailReposArgs.repoName)
-    }
-
-    private fun addObservers() {
-        viewModel.detailRepos
-            .observe(viewLifecycleOwner, Observer { detailRepos ->
-                renderDetailRepos(detailRepos)
-            })
-
-        viewModel.message.observe(this, Observer { message ->
-            if (!message.isNullOrEmpty()) {
-                Toast.makeText(requireActivity(), message, Toast.LENGTH_SHORT).show()
-            }
-        })
+        viewModel.intentChannel.offer(DetailReposIntent.OnStart(detailReposArgs.repoName))
     }
 
     private fun setViews() {
         requireActivity().title = getString(R.string.detail_repos_title, detailReposArgs.repoName)
     }
 
-    private fun renderDetailRepos(detailRepos: DetailSquareRepos) {
-        tv_star.text = detailRepos.starCount
-        tv_fork.text = detailRepos.forkCount
-        tv_full_name.text = detailRepos.fullName
-        tv_description.text = detailRepos.description
-        tv_url.text = detailRepos.url
-        tv_language.text = detailRepos.language
-        tv_watcher.text = detailRepos.watcherCount
-        tv_contributor.text = detailRepos.issuesCount
+    override fun renderState(state: DetailReposViewState) {
+        when (state) {
+            is DetailReposViewState.Success -> {
+                with(state.data) {
+                    tv_star.text = starCount
+                    tv_fork.text = forkCount
+                    tv_full_name.text = fullName
+                    tv_description.text = description
+                    tv_url.text = url
+                    tv_language.text = language
+                    tv_watcher.text = watcherCount
+                    tv_contributor.text = issuesCount
+                }
+            }
+            else -> Unit
+        }
+    }
+
+    override fun renderEvent(event: DetailReposViewEvent) {
+        when (event) {
+            is DetailReposViewEvent.ShowToast -> Toast.makeText(
+                requireActivity(), event.message, Toast.LENGTH_SHORT
+            ).show()
+        }
     }
 }

@@ -1,17 +1,28 @@
 package com.example.squarerepos.core.base
 
 import androidx.lifecycle.ViewModel
-import io.reactivex.disposables.CompositeDisposable
-import kotlinx.coroutines.CoroutineExceptionHandler
+import androidx.lifecycle.viewModelScope
+import kotlinx.coroutines.channels.Channel
+import kotlinx.coroutines.flow.Flow
+import kotlinx.coroutines.flow.MutableStateFlow
+import kotlinx.coroutines.flow.StateFlow
+import kotlinx.coroutines.launch
 
-abstract class BaseViewModel internal constructor() : ViewModel() {
-    protected val compositeDisposable: CompositeDisposable = CompositeDisposable()
+abstract class BaseViewModel<STATE: ViewState, EVENT: ViewEvent, INTENT:Intent>: ViewModel() {
+    val intentChannel = Channel<INTENT>(Channel.UNLIMITED)
+    abstract val _state: MutableStateFlow<STATE>
+    val state: StateFlow<STATE>
+        get() = _state
 
-    val handler = CoroutineExceptionHandler {
-            context, exception -> println("Caught $exception in $context")
+    abstract var _viewEvent: MutableStateFlow<Event<EVENT?>>
+    val viewEvent: Flow<Event<EVENT?>>
+        get() = _viewEvent
+
+    init {
+        viewModelScope.launch {
+            handleIntents()
+        }
     }
 
-    public override fun onCleared() {
-        this.compositeDisposable.clear()
-    }
+    abstract suspend fun handleIntents()
 }

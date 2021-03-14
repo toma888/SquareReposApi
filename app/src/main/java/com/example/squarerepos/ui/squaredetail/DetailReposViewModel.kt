@@ -1,33 +1,39 @@
 package com.example.squarerepos.ui.squaredetail
 
-import androidx.lifecycle.LiveData
-import androidx.lifecycle.MutableLiveData
-import androidx.lifecycle.viewModelScope
 import com.example.squarerepos.core.base.BaseViewModel
-import com.example.squarerepos.core.base.SingleEventLiveData
+import com.example.squarerepos.core.base.Event
 import com.example.squarerepos.data.mapper.toDisplaySquareRepos
 import com.example.squarerepos.domain.interactor.SquareReposInteractor
-import kotlinx.coroutines.launch
+import com.example.squarerepos.network.ResultWrapper
+import kotlinx.coroutines.flow.MutableStateFlow
+import kotlinx.coroutines.flow.collect
+import kotlinx.coroutines.flow.consumeAsFlow
 
 class DetailReposViewModel(
     private val interactor: SquareReposInteractor
-) : BaseViewModel() {
+) : BaseViewModel<DetailReposViewState, DetailReposViewEvent, DetailReposIntent>() {
 
-    private var _detailRepos = MutableLiveData<DetailSquareRepos>()
-    val detailRepos: LiveData<DetailSquareRepos>
-        get() = _detailRepos
 
-    private var _message = SingleEventLiveData<String>()
-    val message: SingleEventLiveData<String>
-        get() = _message
+    override val _state = MutableStateFlow<DetailReposViewState>(DetailReposViewState.Loading)
+    override var _viewEvent = MutableStateFlow<Event<DetailReposViewEvent?>>(Event(null))
 
-    fun loadDetailRepos(repoName: String) {
-        viewModelScope.launch() {
-            try {
-                val detailRepos = interactor.getDetailSquareRepos(repoName)
-                _detailRepos.setValue(detailRepos.toDisplaySquareRepos())
-            } catch (e: Exception) {
-                _message.setValue("An error occurred: ${e.message}")
+
+    override suspend fun handleIntents() {
+        intentChannel.consumeAsFlow().collect { intent ->
+            when (intent) {
+                is DetailReposIntent.OnStart -> {
+                    when (val detailRepos = interactor.getDetailSquareRepos(intent.repoName)) {
+                        is ResultWrapper.Success -> _state.value = DetailReposViewState.Success(
+                            detailRepos.data.toDisplaySquareRepos()
+                        )
+                        is ResultWrapper.Failure -> {
+                            _viewEvent.value = Event(
+                                DetailReposViewEvent.ShowToast("An error occurred: ${detailRepos.throwable.message}")
+                            )
+                            _state.value = DetailReposViewState.Error
+                        }
+                    }
+                }
             }
         }
     }

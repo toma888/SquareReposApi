@@ -1,35 +1,40 @@
 package com.example.squarerepos.ui.squarelist
 
-import androidx.lifecycle.LiveData
-import androidx.lifecycle.MutableLiveData
-import androidx.lifecycle.viewModelScope
 import com.example.squarerepos.core.base.BaseViewModel
-import com.example.squarerepos.core.base.SingleEventLiveData
+import com.example.squarerepos.core.base.Event
 import com.example.squarerepos.data.mapper.toDisplayListSquareRepos
 import com.example.squarerepos.domain.interactor.SquareReposInteractor
 import com.example.squarerepos.network.ResultWrapper
-import com.example.squarerepos.ui.recyclerview.model.SquareReposListDisplayItem
-import kotlinx.coroutines.launch
+import kotlinx.coroutines.flow.MutableStateFlow
+import kotlinx.coroutines.flow.collect
+import kotlinx.coroutines.flow.consumeAsFlow
 
 class SquareReposListViewModel(
     private val interactor: SquareReposInteractor
-) : BaseViewModel() {
+) : BaseViewModel<SquareReposListViewState, SquareReposListViewEvent, SquareReposListIntent>() {
 
-    private var _listOfRepos = MutableLiveData<MutableList<SquareReposListDisplayItem>>()
-    val listOfRepos: LiveData<MutableList<SquareReposListDisplayItem>>
-        get() = _listOfRepos
+    override val _state = MutableStateFlow<SquareReposListViewState>(SquareReposListViewState.Loading)
+    override var _viewEvent: MutableStateFlow<Event<SquareReposListViewEvent?>> = MutableStateFlow(Event(null))
 
-    private var _message = SingleEventLiveData<String>()
-    val message: SingleEventLiveData<String>
-        get() = _message
-
-    fun loadReposList() {
-        viewModelScope.launch {
-            when (val listResponse = interactor.getSquareReposList()) {
-                is ResultWrapper.Success -> _listOfRepos.setValue(
-                    listResponse.data.toDisplayListSquareRepos().toMutableList()
+    override suspend fun handleIntents() {
+        intentChannel.consumeAsFlow().collect { intent ->
+            when (intent) {
+                is SquareReposListIntent.OnStart -> {
+                    when (val listResponse = interactor.getSquareReposList()) {
+                        is ResultWrapper.Success -> _state.value = SquareReposListViewState.Success(
+                            listResponse.data.toDisplayListSquareRepos().toMutableList()
+                        )
+                        is ResultWrapper.Failure -> {
+                            _viewEvent.value = Event(
+                                SquareReposListViewEvent.ShowToast("An error occurred: ${listResponse.throwable.message}")
+                            )
+                            _state.value = SquareReposListViewState.Error
+                        }
+                    }
+                }
+                is SquareReposListIntent.OnDetailClicked -> _viewEvent.value = Event(
+                    SquareReposListViewEvent.NavigateToDetail(intent.repoName)
                 )
-                is ResultWrapper.Failure -> _message.setValue("An error occurred: ${listResponse.throwable.message}")
             }
         }
     }

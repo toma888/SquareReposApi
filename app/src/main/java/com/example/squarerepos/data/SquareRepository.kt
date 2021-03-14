@@ -8,5 +8,5 @@ interface SquareRepository{
 
     suspend fun getRepoList(): ResultWrapper<List<SquareReposResponse>>
 
-    suspend fun getDetailRepo(repo: String): DetailSquareReposResponse
+    suspend fun getDetailRepo(repo: String): ResultWrapper<DetailSquareReposResponse>
 }
