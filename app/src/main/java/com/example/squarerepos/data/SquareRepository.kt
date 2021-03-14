@@ -1,12 +1,13 @@
 package com.example.squarerepos.data
 
-import com.example.squarerepos.network.ResultWrapper
+import androidx.paging.PagingData
 import com.example.squarerepos.network.model.DetailSquareReposResponse
 import com.example.squarerepos.network.model.SquareReposResponse
+import kotlinx.coroutines.flow.Flow
 
 interface SquareRepository{
 
-    suspend fun getRepoList(): ResultWrapper<List<SquareReposResponse>>
+   fun getRepoList(): Flow<PagingData<SquareReposResponse>>
 
     suspend fun getDetailRepo(repo: String): DetailSquareReposResponse
 }
