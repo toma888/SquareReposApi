@@ -61,11 +61,12 @@ dependencies {
     // Lifecycle
     implementation "androidx.lifecycle:lifecycle-viewmodel-ktx:$lifecycle_version"
     implementation "androidx.lifecycle:lifecycle-extensions:$lifecycle_version"
+    implementation "androidx.lifecycle:lifecycle-livedata-ktx:$lifecycle_version"
     kapt "androidx.lifecycle:lifecycle-common-java8:$lifecycle_version"
 
-    // Dagger 2
-    implementation "com.google.dagger:dagger:$dagger_version"
-    kapt "com.google.dagger:dagger-compiler:$dagger_compiler_version"
+    //Koin
+    implementation "org.koin:koin-android-viewmodel:$koin_version"
+    implementation "org.koin:koin-android:$koin_version"
 
     // Navigation
     implementation "androidx.navigation:navigation-fragment-ktx:$navigation_version"
@@ -86,6 +87,7 @@ dependencies {
 
     // JUnit
     testImplementation "junit:junit:$junit_version"
+    testImplementation "org.jetbrains.kotlinx:kotlinx-coroutines-test:$kotlin_coroutines_version"
 
     // RxJava2 AdapterFactory for Retrofit2
     implementation "com.jakewharton.retrofit:retrofit2-rxjava2-adapter:$retrofit_rxjava_adapter_version"

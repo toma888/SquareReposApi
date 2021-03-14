@@ -3,7 +3,6 @@ package com.example.squarerepos.ui.squarelist
 import android.os.Bundle
 import android.view.View
 import android.widget.Toast
-import androidx.fragment.app.viewModels
 import androidx.lifecycle.Observer
 import androidx.navigation.fragment.findNavController
 import androidx.recyclerview.widget.DividerItemDecoration
@@ -16,14 +15,16 @@ import com.example.squarerepos.ui.recyclerview.base.AdapterDelegatesManager
 import com.example.squarerepos.ui.recyclerview.delegate.SquareReposListAdapterDelegate
 import com.example.squarerepos.ui.recyclerview.model.SquareReposListDisplayItem
 import kotlinx.android.synthetic.main.fragment_repos_list.*
+import org.koin.android.viewmodel.ext.android.viewModel
 
 class SquareReposListFragment : BaseFragment(R.layout.fragment_repos_list) {
-    val viewModel by viewModels<SquareReposListViewModel>(factoryProducer = { this.viewModelFactory })
+    private val viewModel by viewModel<SquareReposListViewModel>()
 
     private lateinit var squareReposListAdapter: SquareReposListAdapterDiffUtils
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
+        loadModule()
 
         setListAdapters()
         setViews()

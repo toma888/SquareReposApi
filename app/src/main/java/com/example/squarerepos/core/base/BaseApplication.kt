@@ -1,15 +1,25 @@
 package com.example.squarerepos.core.base
 
 import android.app.Application
-import com.example.squarerepos.core.di.component.AppComponent
-import com.example.squarerepos.core.di.component.DaggerAppComponent
+import com.example.squarerepos.core.di.module.appModule
+import org.koin.android.ext.koin.androidContext
+import org.koin.core.context.startKoin
 
 class BaseApplication : Application() {
-    lateinit var appComponent: AppComponent
 
     override fun onCreate() {
         super.onCreate()
+        initDependencies()
+    }
 
-        appComponent = DaggerAppComponent.builder().build()
+    private fun initDependencies() {
+        startKoin {
+            androidContext(this@BaseApplication)
+            modules(
+                listOf(
+                    appModule
+                )
+            )
+        }
     }
 }

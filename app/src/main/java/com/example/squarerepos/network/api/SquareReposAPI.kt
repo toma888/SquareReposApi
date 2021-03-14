@@ -12,3 +12,4 @@ interface SquareReposAPI {
     @GET("repos/square/{repo}")
     suspend fun getDetailRepo(@Path("repo") repo: String): DetailSquareReposResponse
 }
+
